@@ -31,13 +31,13 @@ SOFTWARE.
 #define APP_VERSION_MINOR     0
 #define APP_VERSION_PATCH     0
 
-#define PIN_BOARD_LED         D0  // GPIO16, blue LED on NodeMCU
-#define PIN_RS                D6  // GPIO12, Display R/S
-#define PIN_EN                D7  // GPIO13, Display Enable
-#define PIN_D4                D5  // GPIO14, Display D4
-#define PIN_D5                D3  // GPIO0,  Display D5
-#define PIN_D6                D1  // GPIO5,  Display D6
-#define PIN_D7                D2  // GPIO4,  Display D7
+#define PIN_BOARD_LED         D0  // blue LED on NodeMCU
+#define PIN_RS                D6  // Display R/S
+#define PIN_EN                D5  // Display Enable
+#define PIN_D4                D4  // Display D4
+#define PIN_D5                D3  // Display D5
+#define PIN_D6                D2  // Display D6
+#define PIN_D7                D1  // Display D7
 
 #define DISPLAY_NUM_COL       16
 #define DISPLAY_NUM_ROW       2
@@ -49,20 +49,24 @@ SOFTWARE.
 //#define CONFIG_DEBUG_NOTFOUND   // uncomment to return debug info when url not found.
 //#define CONFIG_ENABLE_OTA       // uncomment to enable firmware update over the air (OTA)
 
-// Specify the URL of the server which servers the display content here:
+// Specify the URL of the server which serves the display content here:
 #define CONFIG_URL "http://server:port/aaa/bbb"
 // Server needs to respond with json in the following format:
 // { 
-//   "interval": 10000,
 //   "content": [
 //     "row0 text",
 //     "row1 text"
 //     ...
 //     ]
+//   "interval": 10000,                 
+//   "sessionId": 0,                     
+//   "url": "http://xxx.yyy/aaa/bbb"    
 // }
 //
-// "interval" - Optional element which describes the delay in milliseconds for the next query.
-// "content"  - Array of strings with the content for each row of the display.
+// "content"   - Array of strings with the content for each row of the display.
+// "interval"  - Optional. Element which describes the delay in milliseconds for the next query.
+// "sessionId" - Optional. A session id which will be appended as argument to the url 
+// "url"       - Optional. The url for the next query. Replaces CONFIG_URL.
 
 
 

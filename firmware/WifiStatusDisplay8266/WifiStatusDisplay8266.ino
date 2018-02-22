@@ -158,7 +158,9 @@ void setup() {
 //
 void loop() {
 
+  static String url = CONFIG_URL;
   static long interval = 10000;
+  static long sessionId = 0;
   static unsigned long previousMillis = 0 - interval; 
   unsigned long currentMillis = millis();
 
@@ -171,7 +173,7 @@ void loop() {
       // Query for display content from the server.
       // We provide the size of the display as parameters to the server.
       HTTPClient http;  
-      http.begin( CONFIG_URL "?numRow=" STRINGIFY(DISPLAY_NUM_ROW)  "&numCol="  STRINGIFY(DISPLAY_NUM_COL) );
+      http.begin(url + "?numRow=" STRINGIFY(DISPLAY_NUM_ROW) "&numCol=" STRINGIFY(DISPLAY_NUM_COL) "&sessionId=" + sessionId);
       int httpCode = http.GET();                                
    
       if (httpCode == HTTP_CODE_OK) { 
@@ -179,7 +181,7 @@ void loop() {
         Serial.println(payload);   
 
         // Decode the packet.
-        StaticJsonBuffer<200> jsonBuffer;
+        StaticJsonBuffer<512> jsonBuffer;
         JsonObject& root = jsonBuffer.parseObject(payload);
 
         if (root.success()) {
@@ -193,11 +195,20 @@ void loop() {
             g_lcd.print(content);
           }
 
-          // Update interval?
+          // New update interval?
           if (root.containsKey("interval")) {
             interval = root["interval"];
           }
-          
+
+          // New url?
+          if (root.containsKey("url")) {
+            url = root["url"].as<String>();
+          }
+
+          // New url?
+          if (root.containsKey("sessionId")) {
+            sessionId = root["sessionId"];
+          }
         } else {
           g_lcd.clear();
           g_lcd.print("parse error");
